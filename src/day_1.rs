@@ -6,10 +6,10 @@ pub fn input_generator(input: &str) -> Vec<i32> {
 }
 
 #[aoc(day1, part1)]
-pub fn solve(input:&[i32]) -> i64 { input.iter().map(|&x|x as i64).sum() }
+pub fn cum_freq(input:&[i32]) -> i64 { input.iter().map(|&x|x as i64).sum() }
 
 #[aoc(day1, part2)]
-pub fn solve(input:&[i32]) -> i64 {
+pub fn repeated_freq(input:&[i32]) -> i64 {
     let mut s = std::collections::HashSet::new();
     let mut freq:i64 = 0;
     s.insert(freq);
