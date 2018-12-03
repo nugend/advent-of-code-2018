@@ -66,9 +66,13 @@ impl Claim {
         }
     }
     fn conflict(&self, other: &Claim) -> Vec<Pos> {
-        self.bound
-            .intersection(&other.bound)
-            .map_or(Vec::new(), |x| x.points())
+        if self.id != other.id {
+            self.bound
+                .intersection(&other.bound)
+                .map_or(Vec::new(), |x| x.points())
+        } else {
+            Vec::new()
+        }
     }
 }
 
@@ -85,10 +89,20 @@ pub fn input_generator(input: &str) -> Vec<Claim> {
         .collect()
 }
 
-#[aoc(day3, part1)]
+#[aoc(day3, part1, fabric)]
+pub fn fabric(input: &[Claim]) -> u32 {
+    let mut fabric = std::collections::HashMap::new();
+    for p in input.iter().flat_map(|x| x.bound.points()){
+        let sq_in = fabric.entry(p).or_insert(0);
+        *sq_in += 1 as u32;
+    }
+    fabric.iter().filter_map(|x| if *x.1 > 1 { Some(1) } else { None }).sum()
+}
+
+#[aoc(day3, part1, direct_conflicts)]
 pub fn contested(input: &[Claim]) -> usize {
-    let mut claim_iter = input.iter();
     let mut contested_points = std::collections::HashSet::new();
+    let mut claim_iter = input.iter();
     while let Some(claim1) = claim_iter.next() {
         for claim2 in claim_iter.clone() {
             for point in claim1.conflict(claim2) {
