@@ -1,18 +1,18 @@
-use aoc_runner_derive::{aoc_generator, aoc};
+use aoc_runner_derive::{aoc, aoc_generator};
 
 #[aoc_generator(day2)]
 pub fn input_generator<'a>(input: &str) -> Vec<String> {
     input.lines().map(|l| l.trim().to_owned()).collect()
 }
-#[aoc(day2,part2)]
-pub fn neighbors(input:&[String]) -> String {
+#[aoc(day2, part2)]
+pub fn neighbors(input: &[String]) -> String {
     let mut input_iter = input.iter();
-    while let Some(id1) = input_iter.next()  {
+    while let Some(id1) = input_iter.next() {
         for id2 in input_iter.clone() {
             let cpairs = id1.chars().zip(id2.chars());
             let mut differ = 0;
             let mut differ_idx = 0;
-            for (idx,(c1,c2)) in cpairs.enumerate() {
+            for (idx, (c1, c2)) in cpairs.enumerate() {
                 if let true = c1 != c2 {
                     differ += 1;
                     differ_idx = idx
@@ -29,7 +29,7 @@ pub fn neighbors(input:&[String]) -> String {
 }
 
 #[aoc(day2, part1)]
-pub fn checksum(input:&[String]) -> u32 {
+pub fn checksum(input: &[String]) -> u32 {
     let mut twice = 0;
     let mut thrice = 0;
     for id in input {
@@ -45,13 +45,21 @@ pub fn checksum(input:&[String]) -> u32 {
             match occurrences {
                 2 if !twice_seen => {
                     twice += 1;
-                    if thrice_seen { break } else { twice_seen = true };
-                },
-                3 if ! thrice_seen => {
+                    if thrice_seen {
+                        break;
+                    } else {
+                        twice_seen = true
+                    };
+                }
+                3 if !thrice_seen => {
                     thrice += 1;
-                    if twice_seen { break } else { thrice_seen = true };
-                },
-                _ => ()
+                    if twice_seen {
+                        break;
+                    } else {
+                        thrice_seen = true
+                    };
+                }
+                _ => (),
             }
         }
     }
