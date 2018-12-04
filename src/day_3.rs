@@ -111,3 +111,20 @@ pub fn contested(input: &[Claim]) -> usize {
     }
     contested_points.len()
 }
+
+#[aoc(day3, part2, uncontested)]
+pub fn uncontested(input: &[Claim]) -> u16 {
+    let mut all_claims = std::collections::HashSet::new();
+    let mut contested_claims = std::collections::HashSet::new();
+    let mut claim_iter = input.iter();
+    while let Some(claim1) = claim_iter.next() {
+        all_claims.insert(claim1.id);
+        for claim2 in claim_iter.clone() {
+            if  claim1.conflict(claim2).len() > 0 {
+                contested_claims.insert(claim1.id);
+                contested_claims.insert(claim2.id);
+            }
+        }
+    }
+    *all_claims.difference(&contested_claims).next().unwrap()
+}
