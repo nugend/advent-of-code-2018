@@ -56,7 +56,7 @@ impl Bound {
 }
 
 impl Claim {
-    fn new(id: u16, x: u16, y: u16, h: u16, w: u16) -> Claim {
+    fn new(id: u16, x: u16, y: u16, w: u16, h: u16) -> Claim {
         Claim {
             id,
             bound: Bound {
@@ -93,8 +93,7 @@ pub fn input_generator(input: &str) -> Vec<Claim> {
 pub fn fabric(input: &[Claim]) -> u32 {
     let mut fabric = std::collections::HashMap::new();
     for p in input.iter().flat_map(|x| x.bound.points()){
-        let sq_in = fabric.entry(p).or_insert(0);
-        *sq_in += 1 as u32;
+        *fabric.entry(p).or_insert(0) += 1;
     }
     fabric.iter().filter_map(|x| if *x.1 > 1 { Some(1) } else { None }).sum()
 }
